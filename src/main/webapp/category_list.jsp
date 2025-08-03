@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="java.util.List"%>
-<%@ page import="model.entity.CategoryBean"%>
+<%@ page import="model.entity.CategoryBean1"%>
 <html>
 <head>
 <title>カテゴリリスト</title>
@@ -13,14 +13,14 @@
 			<th>カテゴリ名</th>
 		</tr>
 		<%
-		List<CategoryBean> list = (List<CategoryBean>) request.getAttribute("categoryList");
+		List<CategoryBean1> list = (List<CategoryBean1>) request.getAttribute("categoryList");
 
-		if (list == null) {
+				if (list == null) {
 		%>
 
 		<%
 		} else {
-		for (CategoryBean category : list) {
+				for (CategoryBean1 category : list) {
 		%>
 		<tr>
 			<td><%=category.getId()%></td>

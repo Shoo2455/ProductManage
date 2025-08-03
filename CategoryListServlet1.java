@@ -9,21 +9,21 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.dao.CategoryDAO;
-import model.entity.CategoryBean;
+import model.dao.CategoryDAO1;
+import model.entity.CategoryBean1;
 
 @WebServlet("/CategoryListServlet")
-public class CategoryListServlet extends HttpServlet {
+public class CategoryListServlet1 extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		System.out.println("【デバッグ】Servletが呼ばれました");
 
 		try {
-			CategoryDAO dao = new CategoryDAO();
-			List<CategoryBean> list = dao.getAllCategories();
+			CategoryDAO1 dao = new CategoryDAO1();
+			List<CategoryBean1> list = dao.getAllCategories();
 
-			for (CategoryBean c : list) {
+			for (CategoryBean1 c : list) {
 				System.out.println("カテゴリID: " + c.getId() + ", カテゴリ名: " + c.getName());
 			}
 

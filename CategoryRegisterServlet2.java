@@ -7,11 +7,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.dao.CategoryDAO;
-import model.entity.CategoryBean;
+import model.dao.CategoryDAO1;
+import model.entity.CategoryBean1;
 
 @WebServlet("/CategoryRegisterServlet")
-public class CategoryRegisterServlet extends HttpServlet {
+public class CategoryRegisterServlet2 extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -21,8 +21,8 @@ public class CategoryRegisterServlet extends HttpServlet {
 			int id = Integer.parseInt(request.getParameter("id"));
 			String name = request.getParameter("name");
 
-			CategoryBean category = new CategoryBean(id, name);
-			CategoryDAO dao = new CategoryDAO();
+			CategoryBean1 category = new CategoryBean1(id, name);
+			CategoryDAO1 dao = new CategoryDAO1();
 			dao.insertCategory(category);
 
 			response.sendRedirect("CategoryListServlet");

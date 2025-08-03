@@ -1,13 +1,15 @@
 package model.entity;
 
-public class CategoryBean {
+public class CategoryBean1 {
+
 	private int id;
 	private String name;
 
-	public CategoryBean() {
+	public CategoryBean1() {
+
 	}
 
-	public CategoryBean(int id, String name) {
+	public CategoryBean1(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}

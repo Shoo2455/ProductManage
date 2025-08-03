@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import model.entity.ConnectionManager;
+
 public class UserDAO {
 
 	public boolean authenticate(String username, String password) throws Exception {
