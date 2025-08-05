@@ -20,14 +20,14 @@ public class ProductListServlet extends HttpServlet {
 
         try {
             ProductDAO dao = new ProductDAO();
-            List<ProductBean> productList = dao.findAll(); // 一覧取得メソッド
+            List<ProductBean> productList = dao.findAll();
             request.setAttribute("productList", productList);
             RequestDispatcher dispatcher = request.getRequestDispatcher("product_list.jsp");
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("errorMessage", "商品一覧の取得中にエラーが発生しました。");
+            request.setAttribute("errorMessage", "エラーが発生しました。");
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
     }
