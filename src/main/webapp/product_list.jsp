@@ -10,6 +10,7 @@
 <body>
   <h2>商品一覧ページ</h2>
   <p><a href="ProductRegisterServlet">新規登録</a></p>
+   <p><a href="home.jsp">ホームへ戻る</a></p>
 
   <table border="1">
     <tr>
@@ -25,6 +26,7 @@
       <td><%= p.getPrice() %></td>
       <td><%= p.getStock() %></td>
       <td><%= p.getCategoryId() %></td>
+      <td><a href="delete_confirm.jsp?id=<%= p.getId() %>">削除</a></td>
     </tr>
     <% } %>
   </table>

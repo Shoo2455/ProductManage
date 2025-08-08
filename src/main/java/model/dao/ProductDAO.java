@@ -3,6 +3,7 @@ package model.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,4 +45,40 @@ public class ProductDAO {
 			ps.executeUpdate();
 		}
 	}
+	
+	public boolean deleteProductById(int id) throws Exception {
+	    String sql = "DELETE FROM products WHERE id = ?";
+
+	    try (Connection conn = DBManager.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+	        stmt.setInt(1, id);
+	        int result = stmt.executeUpdate();
+	        return result > 0;
+	    }
+	}
+
+
+
+	public List<ProductBean> findAll() throws Exception {
+	    List<ProductBean> list = new ArrayList<>();
+	
+	    try (Connection conn = DBManager.getConnection();
+	         Statement stmt = conn.createStatement();
+	         ResultSet rs = stmt.executeQuery("SELECT * FROM products")) {
+	
+	        while (rs.next()) {
+	            ProductBean p = new ProductBean();
+	            p.setId(rs.getInt("id"));
+	            p.setName(rs.getString("name"));
+	            p.setPrice(rs.getInt("price"));
+	            p.setStock(rs.getInt("stock"));
+	            p.setCategoryId(rs.getInt("category_id"));
+	            list.add(p);
+	        }
+	    }
+	
+	    return list;
+	}
+	
 }

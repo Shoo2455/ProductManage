@@ -20,6 +20,10 @@
 <body>
     <h2>ホーム画面</h2>
     <p>ようこそ、<%= username %> さん！</p>
+     <form action="ProductListServlet" method="get">
+        <input type="submit" value="商品一覧ページ">
+    </form>
+    <br>
     <form action="LogoutServlet" method="get">
         <input type="submit" value="ログアウト">
     </form>
