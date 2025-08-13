@@ -26,6 +26,7 @@
       <td><%= p.getPrice() %></td>
       <td><%= p.getStock() %></td>
       <td><%= p.getCategoryId() %></td>
+      <td><a href="EditProductServlet?id=<%= p.getId() %>">編集</a></td>
       <td><a href="delete_confirm.jsp?id=<%= p.getId() %>">削除</a></td>
     </tr>
     <% } %>
