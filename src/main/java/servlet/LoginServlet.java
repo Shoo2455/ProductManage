@@ -1,3 +1,4 @@
+
 package servlet;
 
 import java.io.IOException;
@@ -32,7 +33,6 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("username", username);
 				response.sendRedirect("home.jsp");
 			} else {
-				// 認証失敗 → login.jsp に戻し、エラーメッセージ表示
 				request.setAttribute("errorMsg", "IDまたはパスワードが違います");
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 			}

@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.dao.CategoryDAO;
 import model.dao.ProductDAO;
@@ -18,24 +19,38 @@ import model.entity.ProductBean;
 public class ProductRegisterServlet extends HttpServlet {
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		HttpSession s = request.getSession(false);
+		if (s == null || s.getAttribute("username") == null) {
+		    response.sendRedirect("login.jsp"); 
+		    return;
+		}
+		
 		try {
 			List<CategoryBean> categories = new CategoryDAO().getAllCategories();
-			req.setAttribute("categories", categories);
-			req.getRequestDispatcher("product_register.jsp").forward(req, resp);
+			request.setAttribute("categories", categories);
+			request.getRequestDispatcher("product_register.jsp").forward(request, response);
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		HttpSession s = request.getSession(false);
+		if (s == null || s.getAttribute("username") == null) {
+		    response.sendRedirect("login.jsp"); 
+		    return;
+		}
+		
+		request.setCharacterEncoding("UTF-8");
 
-		String name = req.getParameter("name");
-		String priceStr = req.getParameter("price");
-		String stockStr = req.getParameter("stock");
-		String categoryIdStr = req.getParameter("categoryId");
+		String name = request.getParameter("name");
+		String priceStr = request.getParameter("price");
+		String stockStr = request.getParameter("stock");
+		String categoryIdStr = request.getParameter("categoryId");
 
 		String error = null;
 		int price = 0, stock = 0, categoryId = 0;
@@ -57,9 +72,9 @@ public class ProductRegisterServlet extends HttpServlet {
 		if (error != null) {
 
 			try {
-				req.setAttribute("errorMsg", error);
-				req.setAttribute("categories", new CategoryDAO().getAllCategories());
-				req.getRequestDispatcher("product_register.jsp").forward(req, resp);
+				request.setAttribute("errorMsg", error);
+				request.setAttribute("categories", new CategoryDAO().getAllCategories());
+				request.getRequestDispatcher("product_register.jsp").forward(request, response);
 			} catch (Exception ex) {
 				throw new ServletException(ex);
 			}
@@ -69,7 +84,7 @@ public class ProductRegisterServlet extends HttpServlet {
 		try {
 			ProductBean p = new ProductBean(name, price, stock, categoryId);
 			new ProductDAO().addProduct(p);
-			resp.sendRedirect("product_list.jsp");
+			response.sendRedirect("product_list.jsp");
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}

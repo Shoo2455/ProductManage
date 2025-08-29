@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.dao.CategoryDAO;
 import model.dao.ProductDAO;
@@ -21,6 +22,12 @@ public class EditProductServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		HttpSession s = request.getSession(false);
+		if (s == null || s.getAttribute("username") == null) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
 
 		try {
 			String sid = request.getParameter("id");
@@ -60,87 +67,43 @@ public class EditProductServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		request.setCharacterEncoding("UTF-8");
 
-		try {
-			int id = Integer.parseInt(request.getParameter("id"));
-			String name = request.getParameter("name");
-			String priceStr = request.getParameter("price");
-			String stockStr = request.getParameter("stock");
-			String categoryIdStr = request.getParameter("categoryId");
-
-			if (name == null || name.isBlank()
-					|| priceStr == null || stockStr == null || categoryIdStr == null) {
-				throw new IllegalArgumentException("必須項目が未入力です。");
-			}
-
-			int price = Integer.parseInt(priceStr);
-			int stock = Integer.parseInt(stockStr);
-			int categoryId = Integer.parseInt(categoryIdStr);
-
-			if (price < 0 || stock < 0) {
-				throw new IllegalArgumentException("価格・在庫は0以上で入力してください。");
-			}
-
-			ProductBean product = new ProductBean();
-			product.setId(id);
-			product.setName(name);
-			product.setPrice(price);
-			product.setStock(stock);
-			product.setCategoryId(categoryId);
-
-			ProductDAO dao = new ProductDAO();
-			int updated = dao.updateProduct(product);
-			if (updated == 0) {
-				throw new IllegalStateException("更新対象が存在しません。");
-			}
-
-			response.sendRedirect("ProductListServlet");
-
-		} catch (NumberFormatException e) {
-			backToEditWithError(request, response, "数値項目は数字で入力してください。");
-		} catch (IllegalArgumentException e) {
-			backToEditWithError(request, response, e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-			backToEditWithError(request, response, "商品の更新に失敗しました。");
+		HttpSession s = request.getSession(false);
+		if (s == null || s.getAttribute("username") == null) {
+			response.sendRedirect(request.getContextPath() + "/login.jsp");
+			return;
 		}
-	}
 
-	private void backToEditWithError(HttpServletRequest request, HttpServletResponse response, String msg)
-			throws ServletException, IOException {
 		try {
-			request.setAttribute("errorMsg", msg);
+
+			int id = Integer.parseInt(request.getParameter("id").trim());
+			String name = request.getParameter("name");
+			int price = Integer.parseInt(request.getParameter("price"));
+			int stock = Integer.parseInt(request.getParameter("stock"));
+			int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 
 			ProductBean p = new ProductBean();
-			if (request.getParameter("id") != null && !request.getParameter("id").isBlank()) {
-				p.setId(Integer.parseInt(request.getParameter("id")));
-			}
-			p.setName(request.getParameter("name"));
-			try {
-				p.setPrice(Integer.parseInt(request.getParameter("price")));
-			} catch (Exception ignore) {
-			}
-			try {
-				p.setStock(Integer.parseInt(request.getParameter("stock")));
-			} catch (Exception ignore) {
-			}
-			try {
-				p.setCategoryId(Integer.parseInt(request.getParameter("categoryId")));
-			} catch (Exception ignore) {
-			}
+			p.setId(id);
+			p.setName(name);
+			p.setPrice(price);
+			p.setStock(stock);
+			p.setCategoryId(categoryId);
 
-			request.setAttribute("product", p);
+			int rows = new ProductDAO().updateProduct(p);
+			System.out.println("[UPDATE] id=" + id + " rows=" + rows + " name=" + name);
 
-			CategoryDAO cdao = new CategoryDAO();
-			List<CategoryBean> categories = cdao.getAllCategories();
-			request.setAttribute("categories", categories);
-
-			request.getRequestDispatcher("edit_product.jsp").forward(request, response);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			request.setAttribute("errorMsg", "再表示時にエラーが発生しました。");
-			request.getRequestDispatcher("product_list.jsp").forward(request, response);
+			if (rows > 0) {
+				response.sendRedirect(request.getContextPath() + "/ProductListServlet");
+			} else {
+				request.setAttribute("errorMessage", "更新対象が見つかりません");
+				request.getRequestDispatcher("error.jsp").forward(request, response);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("errorMessage", "更新中にエラー: " + e.getMessage());
+			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
 	}
 }

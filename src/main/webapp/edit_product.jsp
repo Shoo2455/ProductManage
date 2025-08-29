@@ -35,7 +35,7 @@ if (product == null) {
 }
 %>
 
-<form action="EditProductServlet" method="post">
+<form action="EditProductServlet" method="post" accept-charset="UTF-8">
 	<input type="hidden" name="id" value="<%= product.getId() %>">
 
 	商品名： <input type="text" name="name" value="<%= product.getName() %>"><br>

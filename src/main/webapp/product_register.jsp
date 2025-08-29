@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.entity.CategoryBean" %>
 <%@ page import="java.util.List" %>
 <html><head><title>商品登録</title></head><body>
@@ -9,7 +9,7 @@
     <p style="color:red;"><%= error %></p>
   <% } %>
 
-  <form action="ProductRegisterServlet" method="post">
+  <form action="ProductRegisterServlet" method="post" accept-charset="UTF-8">
     商品名:<input type="text" name="name"><br>
     価格:<input type="text" name="price" pattern="[0-9]+" inputmode="numeric"><br>
     在庫数:<input type="number" name="stock" min="0"><br>
